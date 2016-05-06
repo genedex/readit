@@ -1,5 +1,11 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from .models import Book
 # Create your views here.
 def list_books(request):
-	return HttpResponse(request.user.username)
+	books = Book.objects.exclude(date_reviewed__isnull = True)
+
+	context = {
+	'books': books,
+	}
+
+	return render(request, 'list.html', context )
