@@ -1,14 +1,14 @@
 from __future__ import unicode_literals
-from django.utils.timezone import Now
+import datetime
 from django.db import models
 
 # Create your models here.
 class Book(models.Model):
 	title = models.CharField(max_length = 255, verbose_name = "Book's title")
-	author = models.ManyToManyField("Author", related_name="books")
+	authors = models.ManyToManyField("Author", related_name="books")
 	review = models.TextField(blank=True, null=True)
-	date_reviewd = models.DateTimeField(blank=True, null=True)
-	is_favorite = models.BooleanField(default=False, verbose_name = "Favourite?")
+	date_reviewed = models.DateTimeField(blank=True, null=True)
+	is_favourite = models.BooleanField(default=False, verbose_name = "Favourite?")
 
 	def __str__(self):
 		return "{} by {}".format(self.title,self.list_authors())
@@ -18,7 +18,7 @@ class Book(models.Model):
 
 	def save(self,*args,**kwargs):
 		if (self.review and self.date_reviewd is None):
-			self.date_reviewed = Now()
+			self.date_reviewed = datetime.datetime.now()
 
 		super(Book, self).save(*args,**kwargs)
 
